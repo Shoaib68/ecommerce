@@ -11,14 +11,10 @@ const adminAuth = require('../middleware/adminAuth');
 // @access  Private/Admin
 router.get('/stats', [auth, adminAuth], async (req, res) => {
   try {
-    console.log("Fetching admin stats...");
-    
     // Get accurate counts from the database
     const totalOrders = await Order.countDocuments();
     const totalCustomers = await User.countDocuments({ role: 'customer' });
     const totalProducts = await Product.countDocuments({ isActive: true });
-    
-    console.log("Basic counts fetched:", { totalOrders, totalCustomers, totalProducts });
     
     // Calculate total revenue from all completed and delivered orders
     const revenueResult = await Order.aggregate([
@@ -26,8 +22,6 @@ router.get('/stats', [auth, adminAuth], async (req, res) => {
       { $group: { _id: null, totalRevenue: { $sum: '$totalAmount' } } }
     ]);
     const totalRevenue = revenueResult.length > 0 ? revenueResult[0].totalRevenue : 0;
-    
-    console.log("Total revenue calculated:", totalRevenue);
     
     // Calculate growth percentages based on the last month
     const oneMonthAgo = new Date();
@@ -45,12 +39,6 @@ router.get('/stats', [auth, adminAuth], async (req, res) => {
     const orderGrowth = previousMonthOrders > 0 
       ? ((currentMonthOrders - previousMonthOrders) / previousMonthOrders) * 100 
       : currentMonthOrders > 0 ? 100 : 0;
-    
-    console.log("Order growth calculated:", { 
-      currentMonthOrders, 
-      previousMonthOrders, 
-      orderGrowth 
-    });
     
     // Customer growth calculation
     const currentMonthCustomers = await User.countDocuments({ 
@@ -145,15 +133,11 @@ router.get('/stats', [auth, adminAuth], async (req, res) => {
 // @access  Private/Admin
 router.get('/orders/recent', [auth, adminAuth], async (req, res) => {
   try {
-    console.log("Fetching recent orders...");
-    
     const orders = await Order.find()
       .sort({ createdAt: -1 })
       .limit(5)
       .populate('user', 'firstName lastName email')
       .populate('items.product', 'name images');
-    
-    console.log("Found orders:", orders.length);
     
     // Format orders to ensure they have all required fields
     const formattedOrders = orders.map(order => {
@@ -179,8 +163,6 @@ router.get('/orders/recent', [auth, adminAuth], async (req, res) => {
       };
     });
     
-    console.log("Formatted orders successfully");
-    
     res.json({ orders: formattedOrders });
   } catch (err) {
     console.error('Recent orders error:', err.message);
@@ -193,8 +175,6 @@ router.get('/orders/recent', [auth, adminAuth], async (req, res) => {
 // @access  Private/Admin
 router.get('/orders', [auth, adminAuth], async (req, res) => {
   try {
-    console.log("Fetching all orders...");
-    
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;

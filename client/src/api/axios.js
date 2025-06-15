@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-// Use the proxy configuration from package.json
-const API_URL = '';
+// Use the proxy configuration from package.json in development
+// In production, we'll use relative URLs which will be handled by nginx
+const API_URL = process.env.NODE_ENV === 'production' ? '' : '';
 
 const instance = axios.create({
   baseURL: API_URL,

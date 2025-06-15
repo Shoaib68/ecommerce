@@ -12,7 +12,7 @@ const auth = async (req, res, next) => {
 
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
-      console.log("Token decoded successfully for user:", decoded.userId);
+      // Removed console log of sensitive user information
       
       const user = await User.findById(decoded.userId)
       if (!user || !user.isActive) {

@@ -10,7 +10,9 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "build": "npm run build --prefix client",
     "seed": "node server/scripts/seedDatabase.js",
-    "create-admin": "node server/scripts/createAdmin.js"
+    "create-admin": "node server/scripts/createAdmin.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -27,7 +29,9 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
-    "nodemon": "^3.1.0"
+    "jest": "^30.0.0",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.1.1"
   },
   "keywords": [
     "ecommerce",

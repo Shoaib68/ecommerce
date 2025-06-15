@@ -46,8 +46,8 @@ mongoose.connection.on('disconnected', () => {
 const connectWithRetry = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
-
       serverSelectionTimeoutMS: 5000,
+      // Mongoose 7+ doesn't need these options anymore, they're the default
     })
     console.log('MongoDB connected successfully')
   } catch (error) {

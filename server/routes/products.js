@@ -14,6 +14,7 @@ const router = express.Router()
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(__dirname, "..", "public", "uploads", "products")
+    // Ensure upload directory exists
     fs.mkdirSync(uploadPath, { recursive: true })
     cb(null, uploadPath)
   },
@@ -52,10 +53,6 @@ router.get(
 
       if (req.query.category) {
         filter.category = req.query.category;
-      }
-
-      if (req.query.category) {
-        filter.category = req.query.category
       }
 
       if (req.query.minPrice || req.query.maxPrice) {
@@ -124,6 +121,9 @@ router.post(
     body("price").isFloat({ min: 0 }).withMessage("Price must be a positive number"),
     body("category").isMongoId().withMessage("Valid category is required"),
     body("stockQuantity").isInt({ min: 0 }).withMessage("Stock quantity must be a positive integer"),
+    body("comparePrice").optional().isFloat({ min: 0 }).withMessage("Compare price must be a positive number"),
+    body("tags").optional().isArray().withMessage("Tags must be an array"),
+    body("specifications").optional().isArray().withMessage("Specifications must be an array"),
   ],
   async (req, res) => {
     try {

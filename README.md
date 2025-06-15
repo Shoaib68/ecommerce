@@ -146,6 +146,25 @@ e-market-mern/
 
 ## 🧪 Testing
 
+### Running Tests
+The project includes comprehensive test suites for both unit and integration testing:
+
+```bash
+# Run all tests
+npm test
+
+# Run only unit tests
+npm test -- tests/unit
+
+# Run only integration tests
+npm test -- tests/integration
+
+# Run tests with coverage report
+npm test -- --coverage
+```
+
+See the `tests/README.md` file for more details on the testing structure.
+
 ### Test User Accounts
 After running the seed script, you can use these test accounts:
 
